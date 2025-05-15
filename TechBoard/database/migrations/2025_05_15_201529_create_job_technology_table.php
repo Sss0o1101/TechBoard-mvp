@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('job_technology', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('job_listing_id')->constrained()->cascadeOnDelete();  //求人削除時に中間データも削除
+            $table->foreignId('technology_id')->constrained()->cascadeOnDelete();   //技術削除時に中間データも削除
             $table->timestamps();
+
+            $table->unique(['job_listing_id', 'technology_id']); //同じ求人と技術の組み合わせは1つだけ
         });
     }
 

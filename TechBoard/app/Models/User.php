@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\Favorite;
+use App\Models\JobListing;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -44,5 +49,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function favoriteJobListings(): BelongsToMany
+    {
+        return $this->belongsToMany(JobListing::class, 'favorites', 'user_id', 'job_listing_id')->withPivot(['comment', 'commented_at'])->withTimestamps();
+    }
+
+    public function hasFavorited(JobListing $jobListing): bool
+    {
+        return $this->favorites()->where('job_listing_id', $jobListing->id)->exists();
+    }
+
+    public function favorite(JobListing $jobListing)
+    {
+        return $this->favorites()->where('job_listing_id', $jobListing->id)->first();
     }
 }

@@ -4,9 +4,7 @@ namespace App\Traits;
 
 trait LoadsSeederData
 {
-    /**
-     * 指定したJSONファイルからデータを読み込む
-     */
+    // 指定したJSONファイルからデータを読み込む
     protected function loadData(string $path): array
     {
         $fullPath = database_path("data/{$path}");
@@ -18,9 +16,7 @@ trait LoadsSeederData
         return json_decode(file_get_contents($fullPath), true);
     }
 
-    /**
-     * 指定ディレクトリ内のすべてのJSONファイルからデータを読み込む
-     */
+    // 指定ディレクトリ内のすべてのJSONファイルからデータを読み込む
     protected function loadAllDataFromDirectory(string $directory): array
     {
         $data = [];

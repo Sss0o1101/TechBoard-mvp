@@ -32,5 +32,11 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <!-- トースト通知 -->
+        <x-toast-notification />
+
+        <!-- スクリプト -->
+        @stack('scripts')
     </body>
 </html>

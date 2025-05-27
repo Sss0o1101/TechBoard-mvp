@@ -17,7 +17,7 @@ trait LoadsSeederData
     }
 
     // 指定ディレクトリ内のすべてのJSONファイルからデータを読み込む
-    protected function loadAllDataFromDirectory(string $directory): array
+    protected function loadAllDataFromDirectory(string $directory): array   
     {
         $data = [];
         $fullPath = database_path("data/{$directory}");

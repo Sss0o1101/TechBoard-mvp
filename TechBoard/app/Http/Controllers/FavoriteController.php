@@ -80,7 +80,14 @@ class FavoriteController extends Controller
         // お気に入り情報を取得
         $favorite = $user->favorites()
             ->where('job_listing_id', $jobListing->id)
-            ->firstOrFail();
+            ->first();
+
+        if (!$favorite) {
+            return response()->json([
+                'success' => false,
+                'message' => 'お気に入りが見つかりません',
+            ], 404);
+        }
 
         // コメントの有無を確認
         $hadComment = !is_null($favorite->comment);
@@ -101,8 +108,8 @@ class FavoriteController extends Controller
             $message = 'コメントを削除しました';
         }
 
-        // Ajax リクエストの場合はJSON形式で返す
-        if ($request->ajax()) {
+        // JSON リクエストの場合はJSON形式で返す（fetch APIからのリクエストも含む）
+        if ($request->expectsJson() || $request->isJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => $message,

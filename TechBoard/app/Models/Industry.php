@@ -17,3 +17,9 @@ class Industry extends Model
         return $this->hasMany(JobListing::class);
     }
 }
+
+
+
+
+
+//仮

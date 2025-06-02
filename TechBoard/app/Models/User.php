@@ -71,3 +71,11 @@ class User extends Authenticatable
         return $this->favorites()->where('job_listing_id', $jobListing->id)->first();
     }
 }
+
+
+
+
+
+
+
+//仮

@@ -172,3 +172,7 @@ export function initFavoriteComments() {
         return div.innerHTML;
     }
 }
+
+
+
+//仮

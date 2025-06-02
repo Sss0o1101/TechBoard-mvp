@@ -40,3 +40,7 @@ export function showToast(message) {
         toast.classList.add('translate-y-full', 'opacity-0');
     }, 3000);
 }
+
+
+
+//仮

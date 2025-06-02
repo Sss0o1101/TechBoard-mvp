@@ -36,3 +36,8 @@ class Favorite extends Model
         return !is_null($this->comment);
     }
 }
+
+
+
+
+//仮

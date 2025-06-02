@@ -16,3 +16,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initFavoriteButtons();
     initFavoriteComments();
 });
+
+
+
+
+
+
+
+
+//仮

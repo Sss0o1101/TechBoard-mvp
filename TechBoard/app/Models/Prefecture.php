@@ -17,3 +17,10 @@ class Prefecture extends Model
         return $this->hasMany(JobListing::class);
     }
 }
+
+
+
+
+
+
+//仮

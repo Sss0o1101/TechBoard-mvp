@@ -69,3 +69,11 @@ class JobListing extends Model
         return '応相談';
     }
 }
+
+
+
+
+
+
+
+//仮

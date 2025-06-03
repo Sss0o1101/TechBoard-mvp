@@ -22,4 +22,4 @@ class JobType extends Model
 
 
 
-//仮
+//仮コード

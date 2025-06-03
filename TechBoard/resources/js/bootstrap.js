@@ -10,4 +10,4 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 
-//仮コード
+//仮コード1

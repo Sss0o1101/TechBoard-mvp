@@ -24,4 +24,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-//仮コード1
+//仮コードjs

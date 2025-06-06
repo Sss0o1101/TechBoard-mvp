@@ -43,4 +43,4 @@ export function showToast(message) {
 
 
 
-//仮コード1
+//仮コードjs

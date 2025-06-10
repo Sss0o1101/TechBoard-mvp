@@ -25,4 +25,4 @@ class Technology extends Model
 
 
 
-//仮コード
+//models

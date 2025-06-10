@@ -40,4 +40,4 @@ class Favorite extends Model
 
 
 
-//仮コード
+//models

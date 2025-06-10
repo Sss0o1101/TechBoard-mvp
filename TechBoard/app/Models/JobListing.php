@@ -76,4 +76,4 @@ class JobListing extends Model
 
 
 
-//仮コード
+//models

@@ -23,4 +23,4 @@ class Prefecture extends Model
 
 
 
-//仮コード
+//models

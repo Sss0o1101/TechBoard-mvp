@@ -175,4 +175,4 @@ export function initFavoriteComments() {
 
 
 
-//仮コードjs
+//js

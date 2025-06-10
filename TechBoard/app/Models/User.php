@@ -78,4 +78,4 @@ class User extends Authenticatable
 
 
 
-//仮コード
+//models

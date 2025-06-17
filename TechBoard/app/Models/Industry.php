@@ -22,4 +22,4 @@ class Industry extends Model
 
 
 
-//models
+

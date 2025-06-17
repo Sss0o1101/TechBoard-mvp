@@ -25,4 +25,4 @@ class Technology extends Model
 
 
 
-//models
+

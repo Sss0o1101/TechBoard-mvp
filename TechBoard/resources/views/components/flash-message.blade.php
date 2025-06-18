@@ -15,3 +15,4 @@
         <span class="block sm:inline">{{ session('info') }}</span>
     </div>
 @endif
+

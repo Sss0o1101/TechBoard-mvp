@@ -18,7 +18,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-white">
             <div>
                 <a href="/">
-                    <h1 class="text-3xl font-bold text-gray-900">TechBoard</h1>
+                    <h1 class="text-3xl font-bold text-[#5433EB]">TechBoard</h1>
                 </a>
             </div>
 

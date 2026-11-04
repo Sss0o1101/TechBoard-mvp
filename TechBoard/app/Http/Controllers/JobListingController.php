@@ -17,77 +17,94 @@ class JobListingController extends Controller
      */
     public function index(Request $request): View
     {
-        // 求人データを取得（リレーションをEager Loading）
-        $query = JobListing::with(['jobType', 'prefecture', 'technologies', 'industry']);
+        // 検索パラメータがあるかチェック
+        $hasSearchParams = $request->filled('keyword') ||
+                          $request->filled('prefecture_id') ||
+                          $request->filled('job_type_id') ||
+                          $request->filled('technology_id') ||
+                          $request->filled('is_inexperienced_ok') ||
+                          $request->filled('is_remote_ok') ||
+                          $request->filled('employment_type') ||
+                          $request->filled('min_salary') ||
+                          $request->filled('max_salary') ||
+                          $request->filled('industry_id');
 
-        // 検索フィルタリング：キーワード
-        if ($request->filled('keyword')) {
-            $keyword = $request->keyword;
-            $query->where(function($q) use ($keyword) {
-                $q->where('title', 'like', "%{$keyword}%")->orWhere('description', 'like', "%{$keyword}%")->orWhere('company_name', 'like', "%{$keyword}%");
-            });
+        // 検索パラメータがない場合は空の結果を返す
+        if (!$hasSearchParams) {
+            $jobs = JobListing::where('id', -1)->paginate(10);
+        } else {
+            // 求人データを取得（リレーションをEager Loading）
+            $query = JobListing::with(['jobType', 'prefecture', 'technologies', 'industry']);
+
+            // 検索フィルタリング：キーワード
+            if ($request->filled('keyword')) {
+                $keyword = $request->keyword;
+                $query->where(function($q) use ($keyword) {
+                    $q->where('title', 'like', "%{$keyword}%")->orWhere('description', 'like', "%{$keyword}%")->orWhere('company_name', 'like', "%{$keyword}%");
+                });
+            }
+
+            // 検索フィルタリング：地域/勤務地
+            if ($request->filled('prefecture_id')) {
+                $query->where('prefecture_id', $request->prefecture_id);
+            }
+
+            // 検索フィルタリング：職種
+            if ($request->filled('job_type_id')) {
+                $query->where('job_type_id', $request->job_type_id);
+            }
+
+            // 検索フィルタリング：技術スタック
+            if ($request->filled('technology_id')) {
+                $query->whereHas('technologies', function($q) use ($request) {
+                    $q->where('technology_id', $request->technology_id);
+                });
+            }
+
+            // 検索フィルタリング：未経験可否
+            if ($request->filled('is_inexperienced_ok')) {
+                $isInexperiencedOk = $request->is_inexperienced_ok === 'yes';
+                $query->where('is_inexperienced_ok', $isInexperiencedOk);
+            }
+
+            // 検索フィルタリング：リモート可否
+            if ($request->filled('is_remote_ok')) {
+                $isRemoteOk = $request->is_remote_ok === 'yes';
+                $query->where('is_remote_ok', $isRemoteOk);
+            }
+
+            // 検索フィルタリング：雇用形態
+            if ($request->filled('employment_type')) {
+                $query->where('employment_type', $request->employment_type);
+            }
+
+            // 検索フィルタリング：最低給与
+            if ($request->filled('min_salary')) {
+                $query->where('min_salary', '>=', $request->min_salary);
+            }
+
+            // 検索フィルタリング：最高給与
+            if ($request->filled('max_salary')) {
+                $query->where('max_salary', '<=', $request->max_salary);
+            }
+
+            // 検索フィルタリング：業界
+            if ($request->filled('industry_id')) {
+                $query->where('industry_id', $request->industry_id);
+            }
+
+            // 並び順
+            $sortField = $request->input('sort', 'created_at');
+            $sortOrder = $request->input('order', 'desc');
+
+            // 許可されたソートフィールドのみを使用（セキュリティ対策）
+            if (in_array($sortField, ['created_at', 'min_salary', 'max_salary'])) {
+                $query->orderBy($sortField, $sortOrder);
+            }
+
+            // ページネーション（クエリストリングを保持）
+            $jobs = $query->paginate(10)->withQueryString();
         }
-
-        // 検索フィルタリング：地域/勤務地
-        if ($request->filled('prefecture_id')) {
-            $query->where('prefecture_id', $request->prefecture_id);
-        }
-
-        // 検索フィルタリング：職種
-        if ($request->filled('job_type_id')) {
-            $query->where('job_type_id', $request->job_type_id);
-        }
-
-        // 検索フィルタリング：技術スタック
-        if ($request->filled('technology_id')) {
-            $query->whereHas('technologies', function($q) use ($request) {
-                $q->where('technology_id', $request->technology_id);
-            });
-        }
-
-        // 検索フィルタリング：未経験可否
-        if ($request->filled('is_inexperienced_ok')) {
-            $isInexperiencedOk = $request->is_inexperienced_ok === 'yes';
-            $query->where('is_inexperienced_ok', $isInexperiencedOk);
-        }
-
-        // 検索フィルタリング：リモート可否
-        if ($request->filled('is_remote_ok')) {
-            $isRemoteOk = $request->is_remote_ok === 'yes';
-            $query->where('is_remote_ok', $isRemoteOk);
-        }
-
-        // 検索フィルタリング：雇用形態
-        if ($request->filled('employment_type')) {
-            $query->where('employment_type', $request->employment_type);
-        }
-
-        // 検索フィルタリング：最低給与
-        if ($request->filled('min_salary')) {
-            $query->where('min_salary', '>=', $request->min_salary);
-        }
-
-        // 検索フィルタリング：最高給与
-        if ($request->filled('max_salary')) {
-            $query->where('max_salary', '<=', $request->max_salary);
-        }
-
-        // 検索フィルタリング：業界
-        if ($request->filled('industry_id')) {
-            $query->where('industry_id', $request->industry_id);
-        }
-
-        // 並び順
-        $sortField = $request->input('sort', 'created_at');
-        $sortOrder = $request->input('order', 'desc');
-
-        // 許可されたソートフィールドのみを使用（セキュリティ対策）
-        if (in_array($sortField, ['created_at', 'min_salary', 'max_salary'])) {
-            $query->orderBy($sortField, $sortOrder);
-        }
-
-        // ページネーション（クエリストリングを保持）
-        $jobs = $query->paginate(10)->withQueryString();
 
         // 検索フォーム用のデータを取得
         $prefectures = Prefecture::orderBy('id')->get();

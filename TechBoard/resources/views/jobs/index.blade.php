@@ -150,27 +150,25 @@
                     </form>
 
                     <!-- 検索結果ステータス -->
-                    @if(request()->hasAny(['keyword', 'prefecture_id', 'job_type_id', 'technology_id', 'is_inexperienced_ok', 'is_remote_ok', 'employment_type', 'min_salary', 'max_salary', 'industry_id']))
-                        <div class="mb-4 flex justify-between items-center">
-                            <div class="text-sm text-gray-600">
-                                {{ $jobs->total() }}件中 {{ $jobs->firstItem() ?? 0 }}〜{{ $jobs->lastItem() ?? 0 }}件表示
-                            </div>
-
-                            <!-- ソート機能 -->
-                            <div class="text-sm">
-                                <span class="mr-2">並び順:</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'order' => 'desc']) }}"
-                                   class="{{ (request('sort', 'created_at') == 'created_at' && request('order', 'desc') == 'desc') ? 'font-bold text-blue-600' : 'text-gray-600' }}">
-                                    新着順
-                                </a>
-                                <span class="mx-1">|</span>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'min_salary', 'order' => 'desc']) }}"
-                                   class="{{ (request('sort') == 'min_salary' && request('order') == 'desc') ? 'font-bold text-blue-600' : 'text-gray-600' }}">
-                                    給与高い順
-                                </a>
-                            </div>
+                    <div class="mb-4 flex justify-between items-center">
+                        <div class="text-sm text-gray-600">
+                            {{ $jobs->total() }}件中 {{ $jobs->firstItem() ?? 0 }}〜{{ $jobs->lastItem() ?? 0 }}件表示
                         </div>
-                    @endif
+
+                        <!-- ソート機能 -->
+                        <div class="text-sm">
+                            <span class="mr-2">並び順:</span>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'order' => 'desc']) }}"
+                               class="{{ (request('sort', 'created_at') == 'created_at' && request('order', 'desc') == 'desc') ? 'font-bold text-blue-600' : 'text-gray-600' }}">
+                                新着順
+                            </a>
+                            <span class="mx-1">|</span>
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'min_salary', 'order' => 'desc']) }}"
+                               class="{{ (request('sort') == 'min_salary' && request('order') == 'desc') ? 'font-bold text-blue-600' : 'text-gray-600' }}">
+                                給与高い順
+                            </a>
+                        </div>
+                    </div>
 
                     <!-- 求人カード一覧 -->
                     <div class="space-y-4 mt-6">
@@ -251,21 +249,17 @@
                                 </div>
                             </div>
                         @empty
-                            @if(request()->hasAny(['keyword', 'prefecture_id', 'job_type_id', 'technology_id', 'is_inexperienced_ok', 'is_remote_ok', 'employment_type', 'min_salary', 'max_salary', 'industry_id']))
-                                <div class="text-center py-8 bg-white rounded-lg shadow">
-                                    <p class="text-gray-500">条件に一致する求人が見つかりませんでした</p>
-                                    <p class="text-sm text-gray-400 mt-1">検索条件を変更して再度お試しください</p>
-                                </div>
-                            @endif
+                            <div class="text-center py-8 bg-white rounded-lg shadow">
+                                <p class="text-gray-500">条件に一致する求人が見つかりませんでした</p>
+                                <p class="text-sm text-gray-400 mt-1">検索条件を変更して再度お試しください</p>
+                            </div>
                         @endforelse
                     </div>
 
                     <!-- ページネーション -->
-                    @if(request()->hasAny(['keyword', 'prefecture_id', 'job_type_id', 'technology_id', 'is_inexperienced_ok', 'is_remote_ok', 'employment_type', 'min_salary', 'max_salary', 'industry_id']) && $jobs->total() > 0)
-                        <div class="mt-6">
-                            {{ $jobs->links() }}
-                        </div>
-                    @endif
+                    <div class="mt-6">
+                        {{ $jobs->links() }}
+                    </div>
                 </div>
             </div>
         </div>

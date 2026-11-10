@@ -81,10 +81,18 @@ class JobListingController extends Controller
         $sortField = $request->input('sort', 'created_at');
         $sortOrder = $request->input('order', 'desc');
 
+        // 許可された並び方向（asc / desc）以外は desc にする
+        if (!in_array($sortOrder, ['asc', 'desc'], true)) {
+            $sortOrder = 'desc';
+        }
+
         // 許可されたソートフィールドのみを使用（セキュリティ対策）
         if (in_array($sortField, ['created_at', 'min_salary', 'max_salary'])) {
             $query->orderBy($sortField, $sortOrder);
         }
+
+        // 【任意】同じ値の行の順番を固定する（ページ送りで重複・抜けが出ないように）
+        $query->orderByDesc('id');
 
         // ページネーション（クエリストリングを保持）
         $jobs = $query->paginate(10)->withQueryString();

@@ -181,7 +181,7 @@
                                     </div>
                                     <div class="flex space-x-2">
                                         @auth
-                                            @if (auth()->user()->hasFavorited($job))
+                                            @if ($favoritedJobIds->contains($job->id))
                                                 <form action="{{ route('favorites.destroy', $job) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')

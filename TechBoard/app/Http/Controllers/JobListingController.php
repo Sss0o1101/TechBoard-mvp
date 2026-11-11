@@ -77,7 +77,7 @@ class JobListingController extends Controller
             $query->where('industry_id', $request->industry_id);
         }
 
-        // 並び順
+                // 並び順
         $sortField = $request->input('sort', 'created_at');
         $sortOrder = $request->input('order', 'desc');
 
@@ -92,10 +92,20 @@ class JobListingController extends Controller
         }
 
         // 【任意】同じ値の行の順番を固定する（ページ送りで重複・抜けが出ないように）
-        $query->orderByDesc('id');
+        //$query->orderByDesc('id');
 
         // ページネーション（クエリストリングを保持）
         $jobs = $query->paginate(10)->withQueryString();
+
+        // ページネーション（クエリストリングを保持）
+        $jobs = $query->paginate(10)->withQueryString();
+
+        // ログイン中ユーザーが、このページの求人のうちお気に入り済みのID一覧（1回のクエリで取得）
+        $favoritedJobIds = $request->user()
+            ? $request->user()->favorites()
+            ->whereIn('job_listing_id', $jobs->getCollection()->pluck('id'))
+            ->pluck('job_listing_id')
+            : collect();
 
         // 検索フォーム用のデータを取得
         $prefectures = Prefecture::orderBy('id')->get();
@@ -106,7 +116,7 @@ class JobListingController extends Controller
 
         return view('jobs.index', compact(
             'jobs', 'prefectures', 'jobTypes', 'technologies',
-            'industries', 'employmentTypes'
+            'industries', 'employmentTypes', 'favoritedJobIds'
         ));
     }
 

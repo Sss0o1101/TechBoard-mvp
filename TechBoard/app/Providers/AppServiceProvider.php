@@ -19,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Illuminate\Support\Facades\DB::listen(function ($query) {
+            logger($query->sql);
+        });
     }
 
     public const HOME = '/jobs'; // '/dashboard'から変更

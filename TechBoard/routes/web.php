@@ -13,11 +13,15 @@ Route::get('/', function () {
 // ダッシュボードを求人一覧にリダイレクト
 Route::redirect('/dashboard', '/jobs')->name('dashboard');
 
+// 求人一覧・詳細（ログイン不要）
+Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
+Route::get('/jobs/{jobListing}', [JobListingController::class, 'show'])->name('jobs.show');
+
 // 認証が必要なルート
 Route::middleware('auth')->group(function () {
     // 求人関連のルート
-    Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
-    Route::get('/jobs/{jobListing}', [JobListingController::class, 'show'])->name('jobs.show');
+    //Route::get('/jobs', [JobListingController::class, 'index'])->name('jobs.index');
+    //Route::get('/jobs/{jobListing}', [JobListingController::class, 'show'])->name('jobs.show');
 
     // お気に入り関連のルート
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');

@@ -97,9 +97,6 @@ class JobListingController extends Controller
         // ページネーション（クエリストリングを保持）
         $jobs = $query->paginate(10)->withQueryString();
 
-        // ページネーション（クエリストリングを保持）
-        $jobs = $query->paginate(10)->withQueryString();
-
         // ログイン中ユーザーが、このページの求人のうちお気に入り済みのID一覧（1回のクエリで取得）
         $favoritedJobIds = $request->user()
             ? $request->user()->favorites()

@@ -1,5 +1,5 @@
 import './bootstrap';
-import { initFavoriteButtons, showToast } from './favoriteHandler';
+import { showToast } from './favoriteHandler';
 import { initFavoriteComments } from './favoriteCommentHandler';
 
 import Alpine from 'alpinejs';
@@ -13,15 +13,6 @@ Alpine.start();
 
 // DOMコンテンツ読み込み後に初期化
 document.addEventListener('DOMContentLoaded', function() {
-    initFavoriteButtons();
+    //initFavoriteButtons();
     initFavoriteComments();
 });
-
-
-
-
-
-
-
-
-

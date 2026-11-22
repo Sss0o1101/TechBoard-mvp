@@ -64,7 +64,7 @@ export function initFavoriteComments() {
         saveCommentBtn.disabled = true;
         saveCommentBtn.textContent = '保存中...';
 
-        console.log('コメント保存開始:', { jobId: currentJobId, comment: comment });
+        //console.log('コメント保存開始:', { jobId: currentJobId, comment: comment });
 
         fetch(`/favorites/${currentJobId}/comment`, {
             method: 'PATCH',
@@ -77,7 +77,7 @@ export function initFavoriteComments() {
             body: JSON.stringify({ comment })
         })
         .then(response => {
-            console.log('レスポンス受信:', { status: response.status, ok: response.ok });
+            //console.log('レスポンス受信:', { status: response.status, ok: response.ok });
 
             if (!response.ok) {
                 // エラーレスポンスの詳細を取得
@@ -98,7 +98,7 @@ export function initFavoriteComments() {
             return response.json();
         })
         .then(data => {
-            console.log('JSON解析完了:', data);
+            //console.log('JSON解析完了:', data);
 
             if (data.success) {
                 updateCommentDisplay(currentJobId, data);
@@ -172,7 +172,3 @@ export function initFavoriteComments() {
         return div.innerHTML;
     }
 }
-
-
-
-

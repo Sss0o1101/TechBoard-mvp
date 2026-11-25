@@ -23,8 +23,10 @@ class JobListingController extends Controller
         // 検索フィルタリング：キーワード
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
-            $query->where(function($q) use ($keyword) {
-                $q->where('title', 'like', "%{$keyword}%")->orWhere('description', 'like', "%{$keyword}%")->orWhere('company_name', 'like', "%{$keyword}%");
+            $query->where(function ($q) use ($keyword) {
+                $q->whereLike('title', "%{$keyword}%")
+                    ->orWhereLike('description', "%{$keyword}%")
+                    ->orWhereLike('company_name', "%{$keyword}%");
             });
         }
 
@@ -91,8 +93,8 @@ class JobListingController extends Controller
             $query->orderBy($sortField, $sortOrder);
         }
 
-        // 【任意】同じ値の行の順番を固定する（ページ送りで重複・抜けが出ないように）
-        //$query->orderByDesc('id');
+        // 同じ値の行の順番を固定する（PostgreSQLでは固定しないと、ページ送りで重複・抜けが出る）
+        $query->orderByDesc('id');
 
         // ページネーション（クエリストリングを保持）
         $jobs = $query->paginate(10)->withQueryString();
